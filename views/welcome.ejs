@@ -70,17 +70,7 @@
             
             <div class="row">
             <div class="col-8"> 
-                    <% TaskData.forEach(function(data){%>
-                    <% if (data.length != 0){%>
-                        <p>Last Update Task was <% var myDate = new Date( data.epoch *1000)%><%= myDate.toLocaleString()%>
-
-                        </p>
-                    <%}%>
                     
-                       
-                      
-                
-                <%})%>
             </div>
             <div class="col-4">
                     <% if ( expressFlash.length > 0 ) { %>
