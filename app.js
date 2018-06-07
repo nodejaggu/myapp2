@@ -74,7 +74,7 @@ userSchema.pre('save', function(next) {
   };
 
   var User = mongoose.model('User', userSchema);
-  mongoose.connect("mongodb://localhost/myapp");
+  mongoose.connect("mongodb://myappnode:jaga@143jaga@ds151530.mlab.com:51530/myapp");
 
 var app = express();
 
