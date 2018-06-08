@@ -310,7 +310,7 @@ app.get('/logout',function(req,res){
 		req.logout();
 		req.flash('success','LoggedOut');
 		res.redirect('/login');
-		res.clearCookie("__id");
+		
 });
 
 app.get('/reset',function(req,res){
