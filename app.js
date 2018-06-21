@@ -85,6 +85,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -93,7 +94,9 @@ app.use(session({secret: 'session secret key'}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
+app.use("/public",express.static(__dirname + "/public"));
+app.use('/',express.static(__dirname + '/'));
 
 
 //CHECKING FOR LOGIN USERS
@@ -104,6 +107,19 @@ function islogin(req, res, next){
 	}
 	
 	res.redirect('/')
+}
+
+//Taking user data from database
+var mydata = function (req,res,next){
+	login_data.find({},function(err,data){
+		if(err){
+			console.log(err);
+		}
+		else{
+			req.mydata = data;
+			next();
+		}
+	});
 }
 //HOME PAGE GET ROUTE
 app.get('/',function(req,res){
@@ -360,6 +376,22 @@ app.post('/resetpass',function(req,res){
 	
 	
 });
+
+app.use(mydata);
+
+app.get('/admin',function(req,res,mydata){
+	var userData = req.mydata;
+	res.render('admin',{adminData:userData});
+	
+});
+
+app.get('/view/:id',function(req,res){
+	var formData = req.body.datefilter;
+	var id = req.params.id;
+	console.log(formData,id);
+	res.send('Hi User');
+});
+
 
 // catch 404 and forward to error handler
 app.listen(app.get('port'),function(){
