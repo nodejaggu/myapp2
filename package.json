@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"node app.js"
+    "start": "node app.js"
   },
   "dependencies": {
     "async": "^2.6.1",
@@ -16,6 +16,7 @@
     "ejs": "^2.6.1",
     "express": "~4.16.0",
     "express-flash": "0.0.2",
+    "express-manifest-helpers": "^0.5.0",
     "express-session": "^1.15.6",
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",

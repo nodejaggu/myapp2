@@ -1,8 +1,16 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+.bg-primary{
+  background-color: #17a2b8 !important;
+}
+.myapp-date{
+  margin-top: 5%;
+}
+input{
+  background-color: white;
+  border:2px solid black;
+  border-radius: 3px;
+}
+.form-control{
+  width: 40% !important;
 }
 
-a {
-  color: #00B7FF;
-}
+

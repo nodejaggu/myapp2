@@ -121,6 +121,8 @@ var mydata = function (req,res,next){
 		}
 	});
 }
+
+
 //HOME PAGE GET ROUTE
 app.get('/',function(req,res){
   res.render('home',{user: req.user});
@@ -385,11 +387,27 @@ app.get('/admin',function(req,res,mydata){
 	
 });
 
-app.get('/view/:id',function(req,res){
-	var formData = req.body.datefilter;
+
+app.get('/view/:id/:date/:mine',function(req,res,mydata){
 	var id = req.params.id;
-	console.log(formData,id);
-	res.send('Hi User');
+	var to = req.path.split('/')[3];
+	var from = req.path.split('/')[4];
+	var name;
+	var UserDATA = req.mydata;
+	UserDATA.forEach(function(each){
+		if(each.__id == id){
+			name = each.name;
+		}
+	})
+	var query_details = [{'to':to,'from':from,'name':name}];
+	console.log('Sending user details and timings to front end'+query_details);
+	var query = {'__id':id,'epoch':{$gte:to,$lt:from}}
+	task.find(query,function(err,query_result){
+		res.render('adminDashboard',{TaskData:query_result,UserDetails:query_details});
+	});
+
+
+
 });
 
 
