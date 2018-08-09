@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var ejs = require('ejs');
+//var ejs = require('ejs');
 var session = require('express-session');
 var mongoose = require('mongoose');
 var passport = require('passport');
@@ -14,6 +14,11 @@ var crypto = require('crypto');
 var login_data = require('./models/user.js');
 var task = require('./models/task.js');
 var flash = require('express-flash');
+var nunjucks = require('nunjucks');
+var nunjucks_filters = require('./public/javascripts/nunjucks_filters.js');
+//var dbData = require('./database/userdata.js');
+const MongoClient = require('mongodb').MongoClient;
+
 
 
 passport.use(new LocalStrategy(function(username, password, done){
@@ -77,12 +82,12 @@ userSchema.pre('save', function(next) {
   mongoose.connect("mongodb://myapp:jaga143jaga@ds161503.mlab.com:61503/myapp");
 
 var app = express();
-
+nunjucks_filters(app);
 
 // view engine setup
-app.set('port', process.env.PORT || 1179);
+app.set('port', process.env.PORT || 1151);
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('view engine', 'nunjucks');
 
 
 
@@ -96,7 +101,9 @@ app.use(passport.session());
 app.use(flash());
 //app.use(express.static(path.join(__dirname, 'public')));
 app.use("/public",express.static(__dirname + "/public"));
+app.use("/database",express.static(__dirname + "/database"));
 app.use('/',express.static(__dirname + '/'));
+// async filters must be known at compile-time
 
 
 //CHECKING FOR LOGIN USERS
@@ -125,7 +132,7 @@ var mydata = function (req,res,next){
 
 //HOME PAGE GET ROUTE
 app.get('/',function(req,res){
-  res.render('home',{user: req.user});
+  res.render('home.html',{user: req.user,DataError:req.flash('error')});
 });
 
 //POST DATA OF SIGNUP FOR USER
@@ -138,13 +145,13 @@ app.post('/signup', function(req,res){
 		var u_name=req.body.name;
 		var username= req.body.email;
 		var uid;
-
-	var uname=req.body.email;
-	var query = {email:uname}
-	User.find(query, function(err ,result){
+		User.find({"username":username}, function(err ,result){
+		console.log(result.length);		
 		if(result.length){
 			console.log(result);
+			req.flash('error', 'Email Already exist !');
 			res.redirect('/');
+			
 		}
 		else{
 			user.save(function (err){
@@ -179,13 +186,14 @@ app.post('/signup', function(req,res){
 
 
 app.get('/login',function(req,res){
-  res.render('login',{user: req.user,expressFlash: req.flash('success')});
+  res.render('login.html',{user: req.user,expressFlash: req.flash('success'),DataError:req.flash('error')});
 });
 
 app.post('/login',function(req,res,next){
 	passport.authenticate('local', function(err, user, info) {
 		if (err) return next(err)
 		if (!user) {
+		  req.flash('error','Invalid UserName or Password');	
 		  return res.redirect('/login')
 		}
 		req.logIn(user, function(err) {
@@ -231,7 +239,7 @@ app.get('/welcome',islogin,function(req,res){
 	 
 	 var x = setTimeout(function(){
 		console.log(logData);
-		res.render('welcome',{res_data:logData,TaskData:TaskDetails,expressFlash: req.flash('success')});
+		res.render('welcome.html',{res_data:logData,TaskData:TaskDetails,expressFlash: req.flash('success')});
 	 },1000);
   
 });
@@ -260,7 +268,7 @@ app.post('/task',function(req,res){
    })
 });
 
-app.get('/TaskDashboard',islogin,function(req,res){
+app.get('/TaskDashboard',function(req,res){
    var cid = req.cookies;
    var u_id = cid['__id'];
    var TaskDetails;
@@ -285,7 +293,7 @@ app.get('/TaskDashboard',islogin,function(req,res){
    });
 
    var x = setTimeout(function(){
-   res.render('dashboard',{TaskData:TaskDetails,UserData:UserDetails});
+   res.render('dashboard.html',{TaskData:TaskDetails,UserData:UserDetails});
 },1000);
 });
 
@@ -333,7 +341,7 @@ app.get('/logout',function(req,res){
 
 app.get('/reset',function(req,res){
 	
-	res.render('reset',{expressFlash: req.flash('success'),ErrorMsg:req.flash('error')});
+	res.render('reset.html',{expressFlash: req.flash('success'),ErrorMsg:req.flash('error')});
 });
 
 app.post('/resetpass',function(req,res){
@@ -342,7 +350,8 @@ app.post('/resetpass',function(req,res){
 	var old_pass = req.body.old_pass;
 	var new_pass = req.body.new_pass;
 	var re_new_pass = req.body.re_new_pass;
-	if(new_pass == re_new_pass){
+	console.log(old_pass,new_pass);
+	if(new_pass == re_new_pass && new_pass!="" && old_pass!=""){
 		User.findOne({_id:__id},function(err,user){
 			console.log(user);
 			if(!user){
@@ -373,7 +382,7 @@ app.post('/resetpass',function(req,res){
 	}
 	else{
 		req.flash('error','Re- entered password are not same');
-		res.redirect('reset');
+		res.redirect('reset.html');
 	}
 	
 	
@@ -383,7 +392,7 @@ app.use(mydata);
 
 app.get('/admin',function(req,res,mydata){
 	var userData = req.mydata;
-	res.render('admin',{adminData:userData});
+	res.render('admin.html',{adminData:userData});
 	
 });
 
@@ -403,11 +412,32 @@ app.get('/view/:id/:date/:mine',function(req,res,mydata){
 	console.log('Sending user details and timings to front end'+query_details);
 	var query = {'__id':id,'epoch':{$gte:to,$lt:from}}
 	task.find(query,function(err,query_result){
-		res.render('adminDashboard',{TaskData:query_result,UserDetails:query_details});
+		res.render('adminDashboard.html',{TaskData:query_result,UserDetails:query_details});
 	});
 
 
 
+});
+
+
+app.get('/testing',(req,res,test)=>{
+	var url = "mongodb://myapp:jaga143jaga@ds161503.mlab.com:61503/myapp";
+    MongoClient.connect(url,{ useNewUrlParser: true },function(err,db){
+        if(err) throw err;
+        console.log('DataBase opened');
+        var dbo = db.db('myapp');
+        dbo.collection("tasks").find({}).toArray(function(err, result) {
+            if (err) throw err;
+           res.send(result);
+            db.close();
+          });
+    
+    });
+	
+});
+
+app.get('/push',(req,res) =>{
+	res.render("data.html");
 });
 
 

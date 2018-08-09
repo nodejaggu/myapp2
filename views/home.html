@@ -1,0 +1,138 @@
+<html lang="en">
+
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Welcome</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    
+    <!-- Bootstrap core CSS -->
+    <link href="https://mdbootstrap.com/previews/docs/latest/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Material Design Bootstrap -->
+   <link href="https://mdbootstrap.com/previews/docs/latest/css/mdb.min.css" rel="stylesheet">
+</head>
+<!-- Nav bar-->
+<body class="fixed-sn light-blue-skin">
+
+   <!--Main Navigation-->
+<header>
+
+    <nav class="navbar navbar-expand-lg navbar-dark default-color">
+        <a class="navbar-brand" href="#"><strong>MyApp</strong></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Updates</a>
+                </li>
+                
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                
+                
+            </ul>
+        </div>
+    </nav>
+
+</header>
+    <!--Main Layout-->
+    <main>   
+    <div class="container-fluid mt-2">
+        <!-- write the content here-->
+    <div class="row">
+        <div class="col-md-8 ">
+            <div id="gamooga_div">New Updates will appear here i am working on the content of the program</div>
+            <div class="text-center py-4 mt-3">
+                    <a class="btn btn-cyan" href="/login">Login</a>
+                </div>  
+        </div>
+        <div class="col-md-4">
+<!-- Card -->
+{% if DataError|length > 0 %}
+    <div class="alert alert-danger alert-dismissible" data-auto-dismiss role="alert" >
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>Error!</strong> {{DataError}}
+            </div>
+            {% endif %}
+            <div class="card">
+                <!-- Card body -->
+                <div class="card-body">
+
+                    <!-- Material form register -->
+                    <form action="/signup" method="POST">
+                        <p class="h4 text-center py-4">Sign up</p>
+
+                        <!-- Material input text -->
+                        <div class="md-form">
+                            <i class="fa fa-user prefix grey-text"></i>
+                            <input type="text" id="materialFormCardNameEx" name ="name" class="form-control">
+                            <label for="materialFormCardNameEx" class="font-weight-light">Your name</label>
+                        </div>
+
+                        <!-- Material input email -->
+                        <div class="md-form">
+                            <i class="fa fa-envelope prefix grey-text"></i>
+                            <input type="email" id="materialFormCardEmailEx" name="email" class="form-control">
+                            <label for="materialFormCardEmailEx" class="font-weight-light">Your email</label>
+                        </div>
+
+                        <!-- Material input email -->
+                        <div class="md-form">
+                            <i class="fa fa-exclamation-triangle prefix grey-text"></i>
+                            <input type="email" id="materialFormCardConfirmEx" class="form-control">
+                            <label for="materialFormCardConfirmEx" class="font-weight-light">Confirm your email</label>
+                        </div>
+
+                        <!-- Material input password -->
+                        <div class="md-form">
+                            <i class="fa fa-lock prefix grey-text"></i>
+                            <input type="password" id="materialFormCardPasswordEx" name="password" class="form-control">
+                            <label for="materialFormCardPasswordEx" class="font-weight-light">Your password</label>
+                        </div>
+
+                        <div class="text-center py-4 mt-3">
+                            <button class="btn btn-cyan" type="submit">Register</button>
+                        </div>
+                    </form>
+                    <!-- Material form register -->
+
+                </div>
+                <!-- Card body -->
+
+            </div>
+            <!-- Card -->
+                
+        </div>
+    </div>
+    
+</div>
+</main>
+    <!--Main Layout-->
+
+
+    <script type="text/javascript" src="https://mdbootstrap.com/previews/docs/latest/js/jquery-3.2.1.min.js"></script>
+
+    <!-- Tooltips -->
+    <script type="text/javascript" src="https://mdbootstrap.com/previews/docs/latest/js/popper.min.js"></script>
+
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="https://mdbootstrap.com/previews/docs/latest/js/bootstrap.min.js"></script>
+
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="https://mdbootstrap.com/previews/docs/latest/js/mdb.min.js"></script> 
+    
+   
+
+</script>
+</body>
+</html>
