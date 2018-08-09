@@ -18,6 +18,9 @@ var nunjucks = require('nunjucks');
 var nunjucks_filters = require('./public/javascripts/nunjucks_filters.js');
 //var dbData = require('./database/userdata.js');
 const MongoClient = require('mongodb').MongoClient;
+const bodyParser = require("body-parser");
+var cors = require('cors');
+const webshot = require('webshot');
 
 
 
@@ -94,6 +97,7 @@ app.set('view engine', 'nunjucks');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(session({secret: 'session secret key'}));
 app.use(passport.initialize());
@@ -103,6 +107,7 @@ app.use(flash());
 app.use("/public",express.static(__dirname + "/public"));
 app.use("/database",express.static(__dirname + "/database"));
 app.use('/',express.static(__dirname + '/'));
+app.use(cors());
 // async filters must be known at compile-time
 
 
@@ -428,7 +433,7 @@ app.get('/testing',(req,res,test)=>{
         var dbo = db.db('myapp');
         dbo.collection("tasks").find({}).toArray(function(err, result) {
             if (err) throw err;
-           res.send(result);
+           res.json({"responce":result});
             db.close();
           });
     
@@ -437,9 +442,31 @@ app.get('/testing',(req,res,test)=>{
 });
 
 app.get('/push',(req,res) =>{
-	res.render("data.html");
+	res.render("myapi.html");
 });
 
+app.post('/webshot',(req,res) => {
+	var url = req.body.url;
+	console.log(url);
+	var options = {
+		streamType:"png",
+		windowSize:{
+			width:1024,
+			height:786
+		},
+		shotSize:{
+			width:"all",
+			height:"all"
+		}
+	};
+
+	webshot(url,"myimage.png",options,(err)=>{
+		if(err) throw err;
+		host = "http://mydevappnode.herokuapp.com/";
+		var images_url = host+"myimage.png";
+		res.json({"url":url,"img":images_url});
+	});
+});
 
 // catch 404 and forward to error handler
 app.listen(app.get('port'),function(){
