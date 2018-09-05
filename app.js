@@ -467,7 +467,46 @@ app.post('/webshot',(req,res) => {
 		res.json({"url":url,"img":images_url});
 	});
 });
+app.post('/pushdata',(req,res)=>{
+	var data = []
+	var req_data = req.body;
+	data.push(req_data);
+	console.log(isDict(data));
+	console.log(data);
+	if(true){
+	data.forEach((each)=>{
+		var mydate = new Date().toLocaleDateString();
+		var date = mydate.split('/').join('-');
+		var mytime = new Date().toLocaleTimeString();
+		var current_date = date+" "+mytime;
+		each["date"] = current_date;
+	})
+	var obj_keys  = Object.keys(data[0]);
+	header_keys = "";
+	var append_value = false;
+	var dirname = "public_csv"
+	obj_keys.forEach((each,index)=>{
+		if(index != (obj_keys.length-1)){
+		header_keys = header_keys+each+","
+		}
+		else{header_keys = header_keys+each}
+	});
+	
+	fileExists('./file.csv').then(exists => {
 
+		if(exists == true){
+			csvdata.write('./file.csv', data, {header: header_keys,encoding: 'utf8',append:true});
+		}
+		else{
+			csvdata.write('./file.csv', data, {header: header_keys,encoding: 'utf8'});
+		}
+	  });
+	  res.json({"status":"succesfully created csv file"});
+	}
+	else{
+		res.json({"status":"Please pass the correct json data"});
+	}
+});
 // catch 404 and forward to error handler
 app.listen(app.get('port'),function(){
   console.log('Server started on '+app.get('port')+' port');
