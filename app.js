@@ -471,9 +471,9 @@ app.post('/webshot',(req,res) => {
 	});
 });
 app.post('/pushdata',(req,res)=>{
-	var data = []
-	var req_data = req.body;
-	data.push(req_data);
+	//var data = []
+	var data = req.body;
+	//data.push(req_data);
 	console.log(data);
 	if(true){
 	data.forEach((each)=>{
