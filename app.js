@@ -21,6 +21,9 @@ const MongoClient = require('mongodb').MongoClient;
 const bodyParser = require("body-parser");
 var cors = require('cors');
 const webshot = require('webshot');
+var fs = require('fs');
+var csvdata = require('csvdata');
+const fileExists = require('file-exists');
 
 
 
