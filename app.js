@@ -494,13 +494,13 @@ app.post('/pushdata',(req,res)=>{
 		else{header_keys = header_keys+each}
 	});
 	
-	fileExists('./file.csv').then(exists => {
+	fileExists('./cron.csv').then(exists => {
 
 		if(exists == true){
-			csvdata.write('./file.csv', data, {header: header_keys,encoding: 'utf8',append:true});
+			csvdata.write('./cron.csv', data, {header: header_keys,encoding: 'utf8',append:true});
 		}
 		else{
-			csvdata.write('./file.csv', data, {header: header_keys,encoding: 'utf8'});
+			csvdata.write('./cron.csv', data, {header: header_keys,encoding: 'utf8'});
 		}
 	  });
 	  res.json({"status":"succesfully created csv file"});
