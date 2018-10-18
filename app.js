@@ -509,6 +509,11 @@ app.post('/pushdata',(req,res)=>{
 		res.json({"status":"Please pass the correct json data"});
 	}
 });
+
+app.post('/webhook',(req,res)=>{
+console.log(req.body);
+	res.json("status":"Success");
+});
 // catch 404 and forward to error handler
 app.listen(app.get('port'),function(){
   console.log('Server started on '+app.get('port')+' port');
