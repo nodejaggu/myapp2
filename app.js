@@ -512,6 +512,7 @@ app.post('/pushdata',(req,res)=>{
 
 app.post('/webhook',(req,res)=>{
 console.log(req.body);
+	console.log(req.headers);
 	res.json({"status":"Please pass the correct json data"});
 });
 // catch 404 and forward to error handler
