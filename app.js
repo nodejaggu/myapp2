@@ -19,7 +19,7 @@ var nunjucks_filters = require('./public/javascripts/nunjucks_filters.js');
 //var dbData = require('./database/userdata.js');
 const MongoClient = require('mongodb').MongoClient;
 const bodyParser = require("body-parser");
-//var cors = require('cors');
+var cors = require('cors');
 const webshot = require('webshot');
 var fs = require('fs');
 var csvdata = require('csvdata');
@@ -110,7 +110,7 @@ app.use(flash());
 app.use("/public",express.static(__dirname + "/public"));
 app.use("/database",express.static(__dirname + "/database"));
 app.use('/',express.static(__dirname + '/'));
-//app.use(cors());
+app.use(cors());
 // async filters must be known at compile-time
 
 
