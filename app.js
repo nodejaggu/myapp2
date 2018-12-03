@@ -110,7 +110,7 @@ app.use(flash());
 app.use("/public",express.static(__dirname + "/public"));
 app.use("/database",express.static(__dirname + "/database"));
 app.use('/',express.static(__dirname + '/'));
-app.use(cors());
+//app.use(cors());
 // async filters must be known at compile-time
 
 
